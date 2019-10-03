@@ -1,8 +1,8 @@
 # fitapp
 
 ## Backend README
-[Backend](https://github.com/artofbw/fitapp/backend/README.md)
+[Backend](https://github.com/artofbw/fitapp/blob/master/backend)
 
 
 ## Frontend README
-[Frontend](https://github.com/artofbw/fitapp/frontend/README.md)
+[Frontend](https://github.com/artofbw/fitapp/blob/master/frontend)
