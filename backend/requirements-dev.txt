@@ -2,3 +2,4 @@
 ipdb==0.11
 black==19.3b0
 pre-commit==1.18.3
+flake8==3.7.8
