@@ -45,8 +45,6 @@ pipeline {
                 sh  ''' source activate ${BUILD_TAG}
                         pylint --disable=C irisvmpy || true
                     '''
-            }
-            steps {
                 echo "Code Coverage"
                 sh  ''' source activate ${BUILD_TAG}
                         coverage run irisvmpy/iris.py 1 1 2 3
@@ -88,7 +86,7 @@ pipeline {
         always {
             sh 'conda remove --yes -n ${BUILD_TAG} --all'
         }
-        filure {
+        failure {
             echo "Send e-mail, when failed"
         }
     }
