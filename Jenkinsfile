@@ -1,32 +1,95 @@
 pipeline {
     agent any
 
+    triggers {
+        pollSCM('*/5 * * * 1-5')
+    }
+    options {
+        skipDefaultCheckout(true)
+        // Keep the 10 most recent builds
+        buildDiscarder(logRotator(numToKeepStr: '10'))
+        timestamps()
+    }
+    environment {
+      PATH="/var/lib/jenkins/miniconda3/bin:$PATH"
+    }
+
     stages {
+
+        stage ("Code pull"){
+            steps{
+                checkout scm
+            }
+        }
+        stage('Build environment') {
+            steps {
+                sh '''conda create --yes -n ${BUILD_TAG} python
+                      source activate ${BUILD_TAG}
+                      pip install -r requirements.txt
+                    '''
+            }
+        }
+        stage('Test environment') {
+            steps {
+                sh '''source activate ${BUILD_TAG}
+                      pip list
+                      which pip
+                      which python
+                    '''
+            }
+        }
+
+        stage('Static code metrics') {
+            steps {
+                echo "PEP8 style check"
+                sh  ''' source activate ${BUILD_TAG}
+                        pylint --disable=C irisvmpy || true
+                    '''
+            }
+            steps {
+                echo "Code Coverage"
+                sh  ''' source activate ${BUILD_TAG}
+                        coverage run irisvmpy/iris.py 1 1 2 3
+                        python -m coverage xml -o ./reports/coverage.xml
+                    '''
+            }
+            post{
+                always{
+                    step([$class: 'CoberturaPublisher',
+                                   autoUpdateHealth: false,
+                                   autoUpdateStability: false,
+                                   coberturaReportFile: 'reports/coverage.xml',
+                                   failNoReports: false,
+                                   failUnhealthy: false,
+                                   failUnstable: false,
+                                   maxNumberOfBuilds: 10,
+                                   onlyStable: false,
+                                   sourceEncoding: 'ASCII',
+                                   zoomCoverageChart: false])
+                }
+            }
+        }
+
         stage('Unit tests') {
             steps {
                 sh  ''' source activate ${BUILD_TAG}
                         python -m pytest --verbose --junit-xml test-reports/results.xml
                     '''
             }
+            post {
+                always {
+                    // Archive unit tests for the future
+                    junit allowEmptyResults: true, testResults: 'test-reports/results.xml', fingerprint: true
+                }
+            }
         }
     }
     post {
         always {
-            // Archive unit tests for the future
-            junit allowEmptyResults: true, testResults: 'test-reports/results.xml', fingerprint: true
+            sh 'conda remove --yes -n ${BUILD_TAG} --all'
         }
-        success {
-            echo 'This will run only if successful'
-        }
-        failure {
-            echo 'This will run only if failed'
-        }
-        unstable {
-            echo 'This will run only if the run was marked as unstable'
-        }
-        changed {
-            echo 'This will run only if the state of the Pipeline has changed'
-            echo 'For example, if the Pipeline was previously failing but is now successful'
+        filure {
+            echo "Send e-mail, when failed"
         }
     }
 }
