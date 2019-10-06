@@ -2,25 +2,18 @@ pipeline {
     agent any
 
     stages {
-        stage('Build') {
+        stage('Unit tests') {
             steps {
-                echo 'Building'
-            }
-        }
-        stage('Test') {
-            steps {
-                echo 'Testing'
-            }
-        }
-        stage('Deploy') {
-            steps {
-                echo 'Deploying'
+                sh  ''' source activate ${BUILD_TAG}
+                        python -m pytest --verbose --junit-xml test-reports/results.xml
+                    '''
             }
         }
     }
     post {
         always {
-            echo 'This will always run'
+            // Archive unit tests for the future
+            junit allowEmptyResults: true, testResults: 'test-reports/results.xml', fingerprint: true
         }
         success {
             echo 'This will run only if successful'
