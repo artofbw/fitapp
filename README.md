@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/artofbw/fitapp.svg?branch=master)](https://travis-ci.org/artofbw/fitapp)
 # fitapp
 
 ## Backend README
