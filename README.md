@@ -1,5 +1,5 @@
-[![Build Status](https://travis-ci.org/artofbw/fitapp.svg?branch=master)](https://travis-ci.org/artofbw/fitapp)
 # fitapp
+[![CircleCI](https://circleci.com/gh/artofbw/fitapp/tree/master.svg?style=svg)](https://circleci.com/gh/artofbw/fitapp/tree/master)
 
 ## Backend README
 [Backend](https://github.com/artofbw/fitapp/blob/master/backend)
