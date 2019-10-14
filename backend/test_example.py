@@ -8,3 +8,6 @@ class TestCase(TestCase):
 
     def test_next_example(self):
         self.assertEqual(4, 4)
+
+    def test_another_example(self):
+        self.assertEqual(8, 8)
