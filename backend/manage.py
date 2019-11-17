@@ -1,10 +1,9 @@
-# flake8: noqa
 #!/usr/bin/env python
 import os
 import sys
 
 if __name__ == "__main__":
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "backend.settings")
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "fitapp.settings")
     try:
         from django.core.management import execute_from_command_line
     except ImportError:
@@ -12,6 +11,7 @@ if __name__ == "__main__":
         # issue is really that Django is missing to avoid masking other
         # exceptions on Python 2.
         try:
+            # flake8: noqa
             import django
         except ImportError:
             raise ImportError(
