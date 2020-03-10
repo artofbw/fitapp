@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  db:
+    image: postgres:10.0
+    env_file: backend/.env
+    ports:
+      - "5432:5432"
+  web:
+    container_name: fitapp
+    image: web
+    working_dir: /code/backend
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: bash -c "./manage.py migrate --noinput && ./manage.py load_initial_data && ./manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db

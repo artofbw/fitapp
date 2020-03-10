@@ -24,6 +24,10 @@ load_dotenv(dotenv_path=env_path)
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
 SECRET_KEY = os.getenv("SECRET_KEY")
+NAME = os.getenv("NAME")
+USER = os.getenv("USER")
+HOST = os.getenv("HOST")
+PORT = os.getenv("PORT")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -82,8 +86,11 @@ WSGI_APPLICATION = "fitapp.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        'NAME': NAME,
+        'USER': USER,
+        'HOST': HOST,
+        'PORT': PORT,
     }
 }
 
