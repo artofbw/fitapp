@@ -5,3 +5,4 @@ python-dotenv==0.10.3
 pytest==5.2.0
 teamcity-messages==1.25
 flake8==3.7.8
+factory-boy==2.12.0
