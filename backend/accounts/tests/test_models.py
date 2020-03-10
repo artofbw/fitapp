@@ -5,6 +5,7 @@ from accounts import factories
 
 class AccountsTestCase(TestCase):
 
+    @classmethod
     def setUpTestData(cls):
         cls.user = factories.UserFactory()
 

@@ -11,7 +11,8 @@ class Command(BaseCommand):
         with transaction.atomic():
             self.create_admin()
 
-    def create_admin(self):
+    @staticmethod
+    def create_admin():
         email = "admin@example.com"
         if models.User.objects.filter(username__iexact=email).exists():
             return False
